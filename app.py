@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import pandas as pd
 
 # Título principal
 st.title("TaxiFareModel front")
@@ -7,10 +8,6 @@ st.title("TaxiFareModel front")
 # Descripción
 st.markdown("""
 # This is a simple Streamlit app to predict taxi fares using the TaxiFareModel API
-
-Remember that there are several ways to output content into your web page...
-
-Either as with the title by just creating a string (or an f-string). Or as with this paragraph using the `st.` functions.
 """)
 
 # Inputs del usuario
@@ -21,11 +18,21 @@ pickup_time = st.time_input("Pickup time")
 
 pickup_datetime = f"{pickup_date} {pickup_time}"
 
-pickup_longitude = st.number_input("Pickup Longitude", value=40.7614327)
-pickup_latitude = st.number_input("Pickup Latitude", value=-73.9798156)
-dropoff_longitude = st.number_input("Dropoff Longitude", value=40.6513111)
-dropoff_latitude = st.number_input("Dropoff Latitude", value=-73.8803331)
+pickup_longitude = st.number_input("Pickup Longitude")
+pickup_latitude = st.number_input("Pickup Latitude")
+dropoff_longitude = st.number_input("Dropoff Longitude")
+dropoff_latitude = st.number_input("Dropoff Latitude")
 passenger_count = st.number_input("Passenger Count", min_value=1, max_value=8, value=1)
+
+map_df=pd.DataFrame([
+    {"lon":pickup_longitude,"lat":pickup_latitude},
+    {"lon":dropoff_longitude,"lat":dropoff_latitude}
+  ])
+st.map(
+    map_df,
+    zoom=12,
+    use_container_width=True
+)
 
 # Botón para enviar datos
 if st.button("Predict fare"):
